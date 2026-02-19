@@ -33,6 +33,9 @@ from search import probleme
 # ---- ---- ---- ---- ---- ----
 
 game = Game()
+name = None
+score_total_eq0 = 0
+score_total_eq1 = 0
 
 def init(_boardname=None):
     global player,game
@@ -250,6 +253,25 @@ def main():
 
         # calcul des points
         #TODO
+        liste_fioles = list()
+        score_eq0 = 0
+        score_eq1 = 0
+        for o in items:
+            liste_fioles.append(players_around_item(o))
+        if name == "yellow-map":
+            for nb_eq0, nb_eq1 in liste_fioles:
+                if nb_eq0 < 1 :
+                    if nb_eq1 >= 1:
+                        score_eq1 += 1
+                    else:
+                        continue
+                elif
+
+                
+                elif nb_eq0
+
+        score_total_eq0 += score_eq0
+        score_total_eq1 += score_eq1
 
         # remettre les joueurs à leur pos initiale a la fin de l'episode
 
