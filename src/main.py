@@ -38,7 +38,7 @@ score_total_eq0 = 0
 score_total_eq1 = 0
 
 def init(_boardname=None):
-    global player,game
+    global player,game, name
     name = _boardname if _boardname is not None else 'mixed-map'
     #game = Game('./Cartes/' + name + '.json', SpriteBuilder)
     game = Game('Cartes/' + name + '.json', SpriteBuilder)
@@ -49,6 +49,7 @@ def init(_boardname=None):
     player = game.player
     
 def main():
+    global score_total_eq0, score_total_eq1, name
 
     #for arg in sys.argv:
     #iterations = 40 # nb de pas max par episode
@@ -180,7 +181,7 @@ def main():
 
 
     for e in range(nb_episodes):
-        priority=[0,1]
+        priority=[0,1] if e % 2 == 0 else [1,0] # ordre de priorité inversé pour chaque épisode
         for t in priority:
             print("Team ",t)
             path = []
@@ -258,18 +259,107 @@ def main():
         score_eq1 = 0
         for o in items:
             liste_fioles.append(players_around_item(o))
-        if name == "yellow-map":
+        # S'il y a égalité après vérification des conditions, aucune équipe ne prend le point
+        if name == "yellow-map":    # Map avec seulement des fioles jaunes
             for nb_eq0, nb_eq1 in liste_fioles:
                 if nb_eq0 < 1 :
                     if nb_eq1 >= 1:
                         score_eq1 += 1
-                    else:
-                        continue
-                elif
+                elif nb_eq1 < 1:
+                    score_eq0 += 1
+                elif nb_eq0 > nb_eq1:
+                    score_eq0 += 1
+                elif nb_eq1 > nb_eq0:
+                    score_eq1 += 1
+        elif name == "red-map":     # Map avec seulement des fioles rouges
+            for nb_eq0, nb_eq1 in liste_fioles:
+                cond0 = nb_eq0 >= 2
+                cond1 = nb_eq1 >= 2
+                if cond0 and cond1:
+                    if nb_eq0 > nb_eq1:
+                        score_eq0 += 1
+                    elif nb_eq1 > nb_eq0:
+                        score_eq1 += 1
+                elif cond0:
+                    score_eq0 += 1
+                elif cond1:
+                    score_eq1 += 1
+        elif name == "green-map":   # Map avec seulement des fioles vertes
+            for nb_eq0, nb_eq1 in liste_fioles:
+                total = nb_eq0 + nb_eq1
+                if total >= 3:
+                    if nb_eq0 > nb_eq1:
+                        score_eq0 += 1
+                    elif nb_eq1 > nb_eq0:
+                        score_eq1 += 1
+        elif name == "blue-map":    # Map avec seulement des fioles bleues
+            for nb_eq0, nb_eq1 in liste_fioles:
+                cond0 = nb_eq0 >= 2
+                cond1 = nb_eq1 >= 2
+                if nb_eq0 == 1 and cond1:
+                    score_eq0 += 1
+                elif nb_eq1 == 1 and cond0:
+                    score_eq1 += 1
+                elif cond0 and cond1:
+                    if nb_eq0 > nb_eq1:
+                        score_eq0 += 1
+                    elif nb_eq1 > nb_eq0:
+                        score_eq1 += 1
+                elif cond0:
+                    score_eq0 += 1
+                elif cond1:
+                    score_eq1 += 1
+        elif name == "mixed-map":
+            couleurs_mixed = ["yellow", "green", "yellow", "red", "blue", "red", "yellow", "green", "yellow"]  # On stocke l'ordre des couleurs des fioles dans une liste
+            for i, (nb_eq0, nb_eq1) in enumerate(liste_fioles):
+                couleur_fiole = couleurs_mixed[i]
+                if couleur_fiole == "yellow":
+                    if nb_eq0 < 1 :
+                        if nb_eq1 >= 1:
+                            score_eq1 += 1
+                    elif nb_eq1 < 1:
+                        score_eq0 += 1
+                    elif nb_eq0 > nb_eq1:
+                        score_eq0 += 1
+                    elif nb_eq1 > nb_eq0:
+                        score_eq1 += 1
+                elif couleur_fiole == "red":
+                    cond0 = nb_eq0 >= 2
+                    cond1 = nb_eq1 >= 2
+                    if cond0 and cond1:
+                        if nb_eq0 > nb_eq1:
+                            score_eq0 += 1
+                        elif nb_eq1 > nb_eq0:
+                            score_eq1 += 1
+                    elif cond0:
+                        score_eq0 += 1
+                    elif cond1:
+                        score_eq1 += 1
+                elif couleur_fiole == "green":
+                    total = nb_eq0 + nb_eq1
+                    if total >= 3:
+                        if nb_eq0 > nb_eq1:
+                            score_eq0 += 1
+                        elif nb_eq1 > nb_eq0:
+                            score_eq1 += 1
+                elif couleur_fiole == "blue":
+                    cond0 = nb_eq0 >= 2
+                    cond1 = nb_eq1 >= 2
+                    if nb_eq0 == 1 and cond1:
+                        score_eq0 += 1
+                    elif nb_eq1 == 1 and cond0:
+                        score_eq1 += 1
+                    elif cond0 and cond1:
+                        if nb_eq0 > nb_eq1:
+                            score_eq0 += 1
+                        elif nb_eq1 > nb_eq0:
+                            score_eq1 += 1
+                    elif cond0:
+                        score_eq0 += 1
+                    elif cond1:
+                        score_eq1 += 1
 
-                
-                elif nb_eq0
-
+        print(f" Score épisode {e} == Eq0 : {score_eq0} | Eq1 : {score_eq1}")
         score_total_eq0 += score_eq0
         score_total_eq1 += score_eq1
 
@@ -282,6 +372,13 @@ def main():
                 p.set_rowcol(x,y)
                 j+=1
 
+    print(f"Score final -> Eq0 : {score_total_eq0}  | Eq1 : {score_total_eq1}")
+    if score_total_eq0 > score_total_eq1:
+        print("Gagnant : Equipe 0 !")
+    elif score_total_eq1 > score_total_eq0:
+        print("Gagnant : Equipe 1 !")
+    else:
+        print("Egalité entre les deux équipes 0 et 1 !")
 
     pygame.quit()
 
