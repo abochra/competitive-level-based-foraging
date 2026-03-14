@@ -22,9 +22,14 @@ from search.grid2D import ProblemeGrid2D
 from search import probleme
 
 
+#Strat 
 
+from strategies import strategie_aleatoire_uniforme, strategie_tetu, strategie_aleatoire_coordination, strategie_fictitious_play, strategie_regret_matching
 
-
+# Choisir une stratégie pour chaque équipe
+strategie_eq = [strategie_tetu, strategie_aleatoire_uniforme]
+#l’équipe 0 utilisera strategie_tetu
+#l’équipe 1 utilisera strategie_aleatoire_uniforme
 
 
 
@@ -137,6 +142,7 @@ def main():
 
 
     #-------------------------------
+    
 
     #-------------------------------
     # Fonctions definissant les positions legales et placement aléatoire
@@ -172,8 +178,47 @@ def main():
                     are_here[i]+=1
         return are_here
 
+    # -------------------------------
+    # STRATÉGIES
+    # -------------------------------
+
+    # Stratégies stationnaires simples
 
 
+
+
+# Stratégies stationnaires simples ######NOUVEAU DANS LE CODE !!!!! ici : 
+    historique_fioles = {}  # clé = fiole, valeur = nombre de fois choisie
+
+    for e in range(nb_episodes):
+        priority=[0,1] if e % 2 == 0 else [1,0] # ordre de priorité inversé
+        for t in priority:
+            print(f"Team {t} utilise la stratégie : {strategie_eq[t].__name__}")
+            path = []
+            choix_fiole = []
+            choix_pos = []
+            # Si stratégie coordonnée
+            if strategie_eq[t].__name__ == "strategie_aleatoire_coordination":
+                choix = strategie_eq[t](team[t], items, around_pos_free)
+                for p in range(nb_players_team):
+                    f, pos = choix[p]
+                    choix_fiole.append(f)
+                    choix_pos.append(pos)
+            else:
+                for p in range(nb_players_team):
+                    # on passe l'historique si la stratégie a un param prev_choices
+                    f, pos = strategie_eq[t](team[t][p], items, around_pos_free, prev_choices=historique_fioles)
+                    choix_fiole.append(f)
+                    choix_pos.append(pos)
+
+            # ---- Après avoir choisi les fioles et positions, mettre à jour l'historique ----
+            for f in choix_fiole:
+                historique_fioles[f] = historique_fioles.get(f, 0) + 1
+
+
+
+
+       
 
     # -------------------------------
     # Strategie aleatoire
