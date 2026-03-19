@@ -1,13 +1,26 @@
 import random
 
-def strategie_tetu(player, items, around_pos_free_func, prev_choice=None, prev_choices=None):
-    if prev_choice is not None:
-        return prev_choice
+def strategie_tetu(player, items, around_pos_free_func, prev_choices=None):
+    """
+    prev_choices : dictionnaire {id(player): (fiole, pos)} mémorisé entre les épisodes
+    Si le joueur a déjà un choix mémorisé, on le réutilise sinon on tire au hasard et on mémorise la (fiole,pos) tiré
+    """
+    if prev_choices is None:
+        prev_choices = {}
+    # Si le joueur a déjà un choix mémorisé, on le joue
+    if player in prev_choices:
+        return prev_choices[player]
+    
+    # Si on a toujours pas de position et de fiole pour ce joueur, on choisit au hasard et on le stocke dans le dictionnaire      
     f = random.choice(items)
     pos = random.choice(around_pos_free_func(f.get_rowcol()))
+    prev_choices[player] = (f,pos)
     return (f, pos)
 
-def strategie_aleatoire_uniforme(player, items, around_pos_free_func, prev_choice=None, prev_choices=None):
+def strategie_aleatoire_uniforme(player, items, around_pos_free_func, prev_choices=None):
+    """
+    Ne mémorise pas les choix de chaque joueur, tire aléatoirement parmi toutes les fioles à chaque épisode
+    """
     f = random.choice(items)
     pos = random.choice(around_pos_free_func(f.get_rowcol()))
     return (f, pos)
