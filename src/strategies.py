@@ -49,9 +49,9 @@ def strategie_fictitious_play(player, items, around_pos_free_func, prev_choices=
         # premier tour : choisir aléatoirement
         f = random.choice(items)
     else:
-        # choisir la fiole la plus souvent visitée par l'adversaire
-        max_visits = max(prev_choices.values())
-        candidates = [item for item in items if prev_choices.get(item, 0) == max_visits]
+        # choisir la fiole la moins souvent visitée par l'adversaire et donc gagner des points sur cette fiole
+        min_visits = min(prev_choices.get(item, 0) for item in items)
+        candidates = [item for item in items if prev_choices.get(item, 0) == min_visits]
         f = random.choice(candidates)
     
     pos = random.choice(around_pos_free_func(f.get_rowcol()))
