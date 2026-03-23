@@ -286,7 +286,7 @@ def main():
                     g[i][1] = False
                     g[i][nb_lignes - 1] = False
                     g[i][nb_lignes - 2] = False
-                prob = ProblemeGrid2D(pos_player, choix_pos[p], g, 'manhattan')
+                prob = ProblemeGrid2D(pos_player, pos_cible, g, 'manhattan')
                 path.append(probleme.astar(prob, verbose=False))
                 print("Chemin trouvé:", path[p])
 
