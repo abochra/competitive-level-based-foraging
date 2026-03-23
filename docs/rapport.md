@@ -2,49 +2,47 @@
 
 ## Groupe
 * HADDOUCHI CELINE 
-* ALIAOUI BOOCHRA 
+* ALIAOUI BOCHRA 
 
 ## Description des choix importants d'implémentation
 
-La carte est chargée à partir de fichiers JSON représentant différentes configurations : yellow-map, red-map, green-map, blue-map, mixed-map
+La carte est chargée à partir de fichiers JSON représentant différentes configurations : yellow-map, red-map, green-map, blue-map, mixed-map.
+La fonction ProblemeGrid2D utilise l'algo A* pour calculer le plus court chemin entre la positoin du joueur et celle de la fiole.
 
-la fonction ProblemeGrid2D utilise l'algo A* pour calculer le plus court chemin entre la positoin du joueur et celle de la fiole.
-
-La carte est chargée à partir de fichiers JSON représentant différentes configurations :yellow-map, red-map, green-map, blue-map, mixed-map
-
-
-Les joueurs sont séparés en deux équipes(même nb joueurs) selon leur position initiale sur la carte :
-les joueurs sur la ligne du haut → Equipe 0
-les joueurs sur la ligne du bas → Equipe 1
+Les joueurs sont séparés en deux équipes(même nombre de joueurs) selon leur position initiale sur la carte :
+   - les joueurs sur la ligne du haut → Equipe 0
+   - les joueurs sur la ligne du bas → Equipe 1
 
 
 À chaque épisode :
-Les équipes choisissent des fioles selon leur stratégie.
-Les joueurs se déplacent vers les positions choisies.
-Le score est calculé.
-Les joueurs sont remis à leur position initiale.
-Afin d’éviter un avantage pour une équipe, l’ordre de jeu est inversé à chaque épisode :
-priority=[0,1] if e % 2 == 0 else [1,0]
-Une fois les joueurs positionnés autour des fioles, nous calculons le score de chaque équipe.
+1. Les équipes choisissent des fioles selon leur stratégie.  
+2. Les joueurs se déplacent vers les positions choisies.  
+3. Le score est calculé.  
+4. Les joueurs sont remis à leur position initiale.  
+
+Afin d’éviter un avantage pour une équipe, l’ordre de jeu est inversé à chaque épisode avec la ligne de code :  
+`priority=[0,1] if e % 2 == 0 else [1,0]`
+
+Une fois les joueurs positionnés autour des fioles, nous calculons le score de chaque équipe.  
 La fonction suivante permet de compter combien de joueurs de chaque équipe se trouvent autour d’une fiole :
-players_around_item()
-les règles de score dépendent du type de carte
+*players_around_item()*  
+Les règles de score dépendent du type de carte.
 
 ## Description des stratégies proposées
 
-Pour changer la stratégie, il faut modifier juste la liste strategie_eq
+Pour changer la stratégie d'une équipe, il faut juste modifier la liste strategie_eq
 
-Stratégie têtue : Si le joueur a déjà un choix (prev_choice), il le refait (reste têtu).
-Sinon, il choisit une fiole au hasard et une position libre autour.
+**Stratégie têtue :** Le joueur refait le même choix indéfiniment en le mémorisant (reste têtu).
+S'il n'a pas de choix mémorisé, il choisit une fiole au hasard et une position libre autour.
 
-Strategie_aleatoire_uniforme : Chaque fois qu’on appelle la stratégie, elle choisit une fiole au hasard et une position libre autour
+**Strategie_aleatoire_uniforme :** Chaque fois qu’on appelle la stratégie, elle choisit une fiole au hasard et une position libre autour.
 
-strategie_aleatoire_coordination : Tous les joueurs de l’équipe choisissent la même fiole.
-Chacun prend une position libre différente autour de cette fiole (s’il n’y a plus de positions libres, on choisit une autre position au hasard).
+**Strategie_aleatoire_coordination :** Tous les joueurs de l’équipe choisissent la même fiole.
+Chacun prend une position libre différente autour de cette fiole (s’il n’y a plus de positions libres, on choisit une autre position au hasard sur une autre fiole).
 
-stratégie_fictitious_play : le joueur choisit la fiole la plus visitée par l’adversaire, sinon au hasard si c’est le premier tour.
+**Stratégie_fictitious_play :** Le joueur choisit la fiole la moins visitée par l’adversaire, sinon au hasard si c’est le premier tour.
 
-stratégie_regret_matching: plus une fiole a un regret élevé, plus elle a de chances d’être choisie.
+**Stratégie_regret_matching:** Plus une fiole a un regret élevé, plus elle a de chances d’être choisie par le joueur.
 
 ## Description des résultats
 Comparaison entre les stratégies. Bien indiquer les cartes utilisées.

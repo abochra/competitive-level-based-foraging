@@ -26,7 +26,7 @@ from search import probleme
 from strategies import strategie_aleatoire_uniforme, strategie_tetu, strategie_aleatoire_coordination, strategie_fictitious_play, strategie_regret_matching
 
 # Choisir une stratégie pour chaque équipe
-strategie_eq = [strategie_tetu, strategie_aleatoire_uniforme]
+strategie_eq = [strategie_fictitious_play, strategie_regret_matching]
 # strategie_eq[0] correspond à la stratégie utilisée par l'équipe 0
 # strategie_eq[1] correspond à la stratégie utilisée par l'équipe 1
 
@@ -48,7 +48,7 @@ def init(_boardname=None):
     game = Game('Cartes/' + name + '.json', SpriteBuilder)
     game.O = Ontology(True, 'SpriteSheet-32x32/tiny_spritesheet_ontology.csv')
     game.populate_sprite_names(game.O)
-    game.fps = 10  # frames per second
+    game.fps = 100  # frames per second
     game.mainiteration()
     player = game.player
     
@@ -86,7 +86,7 @@ def main():
     items = [o for o in game.layers["ramassable"]]  #
     nb_fioles = len(items)
 
-    nb_episodes = 2
+    nb_episodes = 10
 
 
     #-------------------------------
@@ -191,8 +191,8 @@ def main():
     rm_etat = [[{} for _ in range(nb_players_team)] for _ in range(2)]
 
     # Pour mettre à jour les regrets et le nombre de visites de chaque fiole par chaque équipe, il faut une liste de deux listes (choix) et un dictionnaire (pour les scores à chaque fiole)
-    choix_etats = [[],[]]
-    scores_etats = {}  # On aura {fiole : (pts_eq0, pts_eq1)}
+    # choix_etats = [[],[]]
+    # scores_etats = {}  # On aura {fiole : (pts_eq0, pts_eq1)}
 
     # -------------------------------
     # EPISODES
