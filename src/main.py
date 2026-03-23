@@ -49,7 +49,7 @@ def init(_boardname=None):
     game = Game('Cartes/' + name + '.json', SpriteBuilder)
     game.O = Ontology(True, 'SpriteSheet-32x32/tiny_spritesheet_ontology.csv')
     game.populate_sprite_names(game.O)
-    game.fps = 10  # frames per second
+    game.fps = 480  # frames per second
     game.mainiteration()
     player = game.player
     
@@ -207,9 +207,15 @@ def main():
             else:
                 for p in range(nb_players_team):
                     # on passe l'historique si la stratégie a un param prev_choices
-                    f, pos = strategie_eq[t](team[t][p], items, around_pos_free, prev_choices=historique_fioles)
+                    if strategie_eq[t].__name__ == "strategie_regret_matching":
+                        f, pos = strategie_eq[t](team[t][p], items, around_pos_free, regrets=historique_fioles)
+                    else:
+                        f, pos = strategie_eq[t](team[t][p], items, around_pos_free, prev_choices=historique_fioles)
                     choix_fiole.append(f)
                     choix_pos.append(pos)
+                    #f, pos = strategie_eq[t](team[t][p], items, around_pos_free, prev_choices=historique_fioles)
+                    #choix_fiole.append(f)
+                    #choix_pos.append(pos)
 
             # ---- Après avoir choisi les fioles et positions, mettre à jour l'historique ----
             for f in choix_fiole:
