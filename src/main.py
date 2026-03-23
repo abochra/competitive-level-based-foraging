@@ -26,7 +26,7 @@ from search import probleme
 from strategies import strategie_aleatoire_uniforme, strategie_tetu, strategie_aleatoire_coordination, strategie_fictitious_play, strategie_regret_matching
 
 # Choisir une stratégie pour chaque équipe
-strategie_eq = [strategie_fictitious_play, strategie_regret_matching]
+strategie_eq = [strategie_tetu, strategie_regret_matching]
 # strategie_eq[0] correspond à la stratégie utilisée par l'équipe 0
 # strategie_eq[1] correspond à la stratégie utilisée par l'équipe 1
 
@@ -48,7 +48,7 @@ def init(_boardname=None):
     game = Game('Cartes/' + name + '.json', SpriteBuilder)
     game.O = Ontology(True, 'SpriteSheet-32x32/tiny_spritesheet_ontology.csv')
     game.populate_sprite_names(game.O)
-    game.fps = 100  # frames per second
+    game.fps = 500  # frames per second
     game.mainiteration()
     player = game.player
     
@@ -62,7 +62,7 @@ def main():
     #print ("Iterations: ")
     #print (iterations)
 
-    init()
+    init("red-map")
     
 
     
@@ -499,6 +499,7 @@ def main():
                 p.set_rowcol(x,y)
                 j+=1
 
+    print(f"Nombre de joueurs : {nb_players}")
     print(f"Score final -> Eq0 : {score_total_eq0}  | Eq1 : {score_total_eq1}")
     if score_total_eq0 > score_total_eq1:
         print("Gagnant : Equipe 0 !")
