@@ -7,7 +7,7 @@ def strategie_tetu(player, items, around_pos_free_func, prev_choices=None):
      - player -> joueur courant 
      - items -> liste des fioles disponibles
      - around_pos_free_func -> fonction déterminant les positions libres autour d'une fiole donnée
-     - prev_choices -> dictionnaire {id(player): (fiole, pos)} partagé entre les joueurs d'une même équipe et mémorisé entre les épisodes par main.py
+     - prev_choices -> dictionnaire {player: (fiole, pos)} partagé entre les joueurs d'une même équipe et mémorisé entre les épisodes par main.py
     Retourne un tuple (f, pos) : une fiole et une position attribuées au joueur
     """
     if prev_choices is None: # Dictionnaire toujours pas initialisé
@@ -30,7 +30,7 @@ def strategie_aleatoire_uniforme(player, items, around_pos_free_func, prev_choic
      - player -> joueur courant 
      - items -> liste des fioles disponibles
      - around_pos_free_func -> fonction déterminant les positions libres autour d'une fiole donnée
-     - prev_choices -> dictionnaire {id(player): (fiole, pos)} partagé entre les joueurs d'une même équipe et mémorisé entre les épisodes par main.py
+     - prev_choices -> dictionnaire {player: (fiole, pos)} partagé entre les joueurs d'une même équipe et mémorisé entre les épisodes par main.py
     Retourne un tuple (f, pos) : une fiole et une position attribuées au joueur
     """
     f = random.choice(items)  # Choisit au hasard une fiole
@@ -44,7 +44,7 @@ def strategie_aleatoire_coordination(team_players, items, around_pos_free_func, 
      - team_players -> joueurs de l'équipe courante
      - items -> liste des fioles disponibles
      - around_pos_free_func -> fonction déterminant les positions libres autour d'une fiole donnée
-     - prev_choices -> dictionnaire {id(player): (fiole, pos)} partagé entre les joueurs d'une même équipe et mémorisé entre les épisodes par main.py
+     - prev_choices -> dictionnaire {player: (fiole, pos)} partagé entre les joueurs d'une même équipe et mémorisé entre les épisodes par main.py
     Retourne une liste de tuple (f, pos) : une fiole et une position attribuées à chaque joueur de cette équipe
     """
     f = random.choice(items)
@@ -65,47 +65,62 @@ def strategie_aleatoire_coordination(team_players, items, around_pos_free_func, 
     return choix
 
 
-def strategie_fictitious_play(player, items, around_pos_free_func, prev_choices=None):
+def strategie_fictitious_play(player, items, around_pos_free_func, prev_choices_adv=None):
     """
-    player : le joueur courant
-    items : liste des fioles
-    around_pos_free_func : fonction pour avoir les positions libres autour
-    prev_choices : dictionnaire {item_id: nombre_de_visites}
+    Stratégie fictitious play : Stratégie best-response basée sur l'historique de choix de l'adversaire. Un joueur va aller sur la fiole la moins visitée par l'équipe adverse pour maximiser ses chances de gagner la fiole.
+    Prend en arguments :
+     - player -> joueur courant 
+     - items -> liste des fioles disponibles
+     - around_pos_free_func -> fonction déterminant les positions libres autour d'une fiole donnée
+     - prev_choices_adv -> dictionnaire {fiole: nombre_de_visites_par_adversaire} partagé entre les joueurs d'une même équipe en mémorisant les choix de l'équipe adverse (mise à jour à chaque épisode par main.py)
+    Retourne un tuple (f, pos) : une fiole et une position attribuées au joueur
     """
-    if prev_choices is None or len(prev_choices) == 0:
-        # premier tour : choisir aléatoirement
+    if prev_choices_adv is None or len(prev_choices_adv) == 0:
+        # Premier tour : on choisit aléatoirement
         f = random.choice(items)
     else:
-        # choisir la fiole la moins souvent visitée par l'adversaire et donc gagner des points sur cette fiole
-        min_visits = min(prev_choices.get(item, 0) for item in items)
-        candidates = [item for item in items if prev_choices.get(item, 0) == min_visits]
-        f = random.choice(candidates)
+        # Les autres tours, on choisit la fiole la moins souvent visitée par l'adversaire et donc gagner des points sur cette fiole
+        min_visits = min(prev_choices_adv.get(item, 0) for item in items)  # On récupère le nombre minimum de visites sur une fiole qui existe
+        candidates = [item for item in items if prev_choices_adv.get(item, 0) == min_visits]  # On stocke dans une liste les fioles qui ont été visités min_visits fois
+        f = random.choice(candidates)   # On choisit aléatoirement une fiole qui a été visité le moins de fois
     
     pos = random.choice(around_pos_free_func(f.get_rowcol()))
     return (f, pos)
 
 def strategie_regret_matching(player, items, around_pos_free_func, regrets=None):
     """
-    regrets : dictionnaire {item_id: score_regret}
+    Stratégie regret matching : Stratégie best-response basée sur les regrets cumulés pour chaque fiole pour chaque joueur. On joue, pour un joueur, chaque fiole avec une probabilité proportionnelle à son regret cumulé positif.
+    Cela signifie qu'on va positionner le joueur sur une fiole qu'il aurait dû jouer pour avoir un score plus élevé.
+    Prend en arguments :
+     - player -> joueur courant 
+     - items -> liste des fioles disponibles
+     - around_pos_free_func -> fonction déterminant les positions libres autour d'une fiole donnée
+     - regrets -> dictionnaire {fiole: score_regret_cumule} propre à chaque joueur (on va mettre à jour le regret cumulé après chaque épisode dans le main.py)
+    Retourne un tuple (f, pos) : une fiole et une position attribuées au joueur
     """
     if regrets is None or len(regrets) == 0:
-        # premier tour : aléatoire
+        # Premier tour : choix aléatoire
         f = random.choice(items)
     else:
+        # On ne garde que les regrets positifs 
         regrets_pos = {item:max(0.0, regrets.get(item, 0.0)) for item in items}
-        # pondération selon les regrets (plus le regret est élevé, plus on a de chance de choisir cette fiole)
         total_regret = sum(regrets_pos.values())
+
         if total_regret == 0:
+            # Tous les regrets sont nuls : aucune fiole n'est favorisée donc on tire une fiole aléatoirement pour la jouer
             f = random.choice(items)
         else:
-            r = random.uniform(0, total_regret)
+            # Tirage aléatoire pondéré par les regrets : plus le regret est élevé, plus on a de chance de choisir cette fiole
+            # Chaque fiole a une proba regret(fiole) / total_regret d'être choisie
+            r = random.uniform(0, total_regret)  # Seuil r tiré aléatoirement entre [0, total_regret]
             cumulative = 0
-            f = items[-1] # Valeur par défaut
+            f = items[-1] # Valeur par défaut si on ne sort pas de la boucle
+            # On parcourt les fioles en cumulant les probabilités jusqu'à dépasser le seuil r 
             for item in items:
-                cumulative += regrets.get(item, 0)
+                cumulative += regrets_pos.get(item, 0)
                 if r <= cumulative:
                     f = item
                     break
     
-    pos = random.choice(around_pos_free_func(f.get_rowcol()))
+    pos = random.choice(around_pos_free_func(f.get_rowcol()))  # Choix d'une position libre autour de la fiole f
     return (f, pos)
