@@ -71,16 +71,6 @@ Nombre de joueurs = 16 (8 par équipe)
 | **Fictitious play** | 11/37 | 14/28 | 26/10 | — | 11/35 |
 | **Regret matching** | 16/29 | 11/29 | 33/10 | 35/11 | — |
 
-### Carte *yellow-map* (16 joueurs)
-
-|   | Têtu | Aléatoire uniforme | Aléatoire coordination | Fictitious play | Regret matching |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Têtu** | — | 22/16 | 40/10 | 37/11 | 29/16 |
-| **Aléatoire uniforme** | 16/22 | — | 33/10 | 28/14 | 29/11 |
-| **Aléatoire coordination** | 10/40 | 10/33 | — | 10/26 | 10/33 |
-| **Fictitious play** | 11/37 | 14/28 | 26/10 | — | 11/35 |
-| **Regret matching** | 16/29 | 11/29 | 33/10 | 35/11 | — |
-
 ### Carte *red-map*
 Nombre de joueurs = 16 (8 par équipe)
 
@@ -91,8 +81,6 @@ Nombre de joueurs = 16 (8 par équipe)
 | **Aléatoire coordination** | 10/15 | 10/20 | — | 9/16 | 10/18 |
 | **Fictitious play** | 24/19 | 11/17 | 16/9 | — | 19/17 |
 | **Regret matching** | 18/19 | 13/16 | 18/10 | 17/19 | — |
-
----
 
 
 ### Carte *green-map*
@@ -106,14 +94,7 @@ Nombre de joueurs = 34 (17 par équipe)
 | **Fictitious play** | 22/29 | 16/26 | 13/13 | — | 26/24 |
 | **Regret matching** | 29/30 | 19/21 | 18/20 | 24/26 | — |
 
-|   | Têtu | Aléatoire uniforme | Aléatoire coordination | Fictitious play | Regret matching |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Têtu** | — | 21/37 | 41/18 | 29/22 | 30/29 |
-| **Aléatoire uniforme** | 37/21 | — | 28/23 | 26/16 | 21/19 |
-| **Aléatoire coordination** | 18/41 | 23/28 | — | 13/13 | 20/18 |
-| **Fictitious play** | 22/29 | 16/26 | 13/13 | — | 26/24 |
-| **Regret matching** | 29/30 | 19/21 | 18/20 | 24/26 | — |
-
+  
 ### Carte *blue-map*
 Nombre de joueurs = 34 (17 par équipe)
 
@@ -129,14 +110,6 @@ Nombre de joueurs = 34 (17 par équipe)
 
 ### Carte *mixed-map*
 Nombre de joueurs = 34 (17 par équipe)
-
-|   | Têtu | Aléatoire uniforme | Aléatoire coordination | Fictitious play | Regret matching |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Têtu** | — | 29/37 | 39/30 | 39/11 | 40/25 |
-| **Aléatoire uniforme** | 37/29 | — | 34/31 | 52/14 | 31/34 |
-| **Aléatoire coordination** | 30/39 | 31/34 | — | 38/16 | 28/33 |
-| **Fictitious play** | 11/39 | 14/52 | 16/38 | — | 18/53 |
-| **Regret matching** | 25/40 | 34/31 | 33/28 | 53/18 | — |
 
 |   | Têtu | Aléatoire uniforme | Aléatoire coordination | Fictitious play | Regret matching |
 | :--- | :---: | :---: | :---: | :---: | :---: |
