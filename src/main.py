@@ -500,6 +500,11 @@ def main():
                 j+=1
 
     print(f"Nombre de joueurs : {nb_players}")
+    print("====================================")
+    print("STRATEGIES UTILISEES")
+    print(f"Equipe 0 : {strategie_eq[0].__name__}")
+    print(f"Equipe 1 : {strategie_eq[1].__name__}")
+    print("====================================")
     print(f"Score final -> Eq0 : {score_total_eq0}  | Eq1 : {score_total_eq1}")
     if score_total_eq0 > score_total_eq1:
         print("Gagnant : Equipe 0 !")
@@ -519,5 +524,8 @@ def main():
 if __name__ == '__main__':
     main()
     
+
+
+
 
 
