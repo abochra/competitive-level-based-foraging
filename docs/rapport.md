@@ -7,9 +7,9 @@
 ## Description des choix importants d'implémentation
 
 La carte est chargée à partir de fichiers JSON représentant différentes configurations : yellow-map, red-map, green-map, blue-map, mixed-map.
-La fonction ProblemeGrid2D utilise l'algo A* pour calculer le plus court chemin entre la positoin du joueur et celle de la fiole.
+La fonction ProblemeGrid2D utilise l'algo A* pour calculer le plus court chemin entre la position du joueur et celle de la fiole.
 
-Les joueurs sont séparés en deux équipes(même nombre de joueurs) selon leur position initiale sur la carte :
+Les joueurs sont séparés en deux équipes (même nombre de joueurs) selon leur position initiale sur la carte :
    - les joueurs sur la ligne du haut → Equipe 0
    - les joueurs sur la ligne du bas → Equipe 1
 
@@ -61,15 +61,16 @@ Comparaison entre les stratégies.
 > Score indiqué : score_equipe0/score_equipe1 (équipe0 utilise la stratégie en ligne et l'équipe 1 utilise la stratégie en colonne)
 
 ### Carte *yellow-map*
-Nombre de joueurs = 16 (donc 8 par équipe) 
+Nombre de joueurs = 16 (8 par équipe) 
 
 |   | Têtu | Aléatoire uniforme | Aléatoire coordination | Fictitious play | Regret matching |
 | :--- | :---: | :---: | :---: | :---: | ---: |
-| **Têtu** | 20/20 | 19/20 | 40/10 | 30/20 | 34/11
-| **Aléatoire uniforme** | 
-| **Aléatoire coordination** |
-| **Fictitious play** |
-| **Regret matching** |
+| **Têtu** | — | 22/16 | 40/10 | 37/11 | 29/16 |
+| **Aléatoire uniforme** |  16/22 | — | 33/10 | 28/14 | 29/11 |
+| **Aléatoire coordination** | 10/40 | 10/33 | — | 10/26 | 10/33 |
+| **Fictitious play** | 11/37 | 14/28 | 26/10 | — | 11/35 |
+| **Regret matching** | 16/29 | 11/29 | 33/10 | 35/11 | — |
+
 
 
 ### Carte *red-map*
@@ -77,50 +78,56 @@ Nombre de joueurs = 16 (8 par équipe)
 
 |   | Têtu | Aléatoire uniforme | Aléatoire coordination | Fictitious play | Regret matching |
 | :--- | :---: | :---: | :---: | :---: | ---: |
-| **Têtu** |  |  | |  | 
-| **Aléatoire uniforme** | 
-| **Aléatoire coordination** |
-| **Fictitious play** |
-| **Regret matching** |
+| **Têtu** | — | 21/14 | 15/10 | 19/24 | 19/18 |
+| **Aléatoire uniforme** | 14/21 | — | 20/10 | 17/11 | 16/13 |
+| **Aléatoire coordination** | 10/15 | 10/20 | — | 9/16 | 10/18 |
+| **Fictitious play** | 24/19 | 11/17 | 16/9 | — | 19/17 |
+| **Regret matching** | 18/19 | 13/16 | 18/10 | 17/19 | — |
+
 
 
 ### Carte *green-map*
-Nombre de joueurs =
+Nombre de joueurs = 34 (17 par équipe)
 
 |   | Têtu | Aléatoire uniforme | Aléatoire coordination | Fictitious play | Regret matching |
-| :--- | :---: | :---: | :---: | :---: | ---: |
-| **Têtu** |  |  | |  | 
-| **Aléatoire uniforme** | 
-| **Aléatoire coordination** |
-| **Fictitious play** |
-| **Regret matching** |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Têtu** | — | 21/37 | 41/18 | 29/22 | 30/29 |
+| **Aléatoire uniforme** | 37/21 | — | 28/23 | 26/16 | 21/19 |
+| **Aléatoire coordination** | 18/41 | 23/28 | — | 13/13 | 20/18 |
+| **Fictitious play** | 22/29 | 16/26 | 13/13 | — | 26/24 |
+| **Regret matching** | 29/30 | 19/21 | 18/20 | 24/26 | — |
+
 
 ### Carte *blue-map*
-Nombre de joueurs =
+Nombre de joueurs = 34 (17 par équipe)
 
 |   | Têtu | Aléatoire uniforme | Aléatoire coordination | Fictitious play | Regret matching |
-| :--- | :---: | :---: | :---: | :---: | ---: |
-| **Têtu** |  |  | |  | 
-| **Aléatoire uniforme** | 
-| **Aléatoire coordination** |
-| **Fictitious play** |
-| **Regret matching** |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Têtu** | — | 28/34 | 30/25 | 77/1 | 16/34 |
+| **Aléatoire uniforme** | 34/28 | — | 20/39 | 47/8 | 27/31 |
+| **Aléatoire coordination** | 25/30 | 39/20 | — | 34/11 | 34/18 |
+| **Fictitious play** | 1/77 | 8/47 | 11/34 | — | 14/22 |
+| **Regret matching** | 34/16 | 31/27 | 18/34 | 22/14 | — |
+
 
 ### Carte *mixed-map*
-Nombre de joueurs =
+Nombre de joueurs = 34 (17 par équipe)
 
 |   | Têtu | Aléatoire uniforme | Aléatoire coordination | Fictitious play | Regret matching |
-| :--- | :---: | :---: | :---: | :---: | ---: |
-| **Têtu** |  |  | |  | 
-| **Aléatoire uniforme** | 
-| **Aléatoire coordination** |
-| **Fictitious play** |
-| **Regret matching** |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Têtu** | — | 29/37 | 39/30 | 39/11 | 40/25 |
+| **Aléatoire uniforme** | 37/29 | — | 34/31 | 52/14 | 31/34 |
+| **Aléatoire coordination** | 30/39 | 31/34 | — | 38/16 | 28/33 |
+| **Fictitious play** | 11/39 | 14/52 | 16/38 | — | 18/53 |
+| **Regret matching** | 25/40 | 34/31 | 33/28 | 53/18 | — |
+
 
 
 
 ## Conclusion
 
-Les stratégies adaptatives (fictitious_play et regret_matching) remportent souvent les parties contre les stratégies simples (aleatoire_uniforme, tetu).
-La coordination est efficace mais moins constante contre des stratégies adaptatives.
-Les stratégies aléatoires simples sont prévisibles et vulnérables sur plusieurs épisodes.
+Les résultats montrent que les stratégies adaptatives sont globalement les plus performantes.  
+Les stratégies simples comme aléatoire uniforme et têtu sont souvent battues car elles ne s’adaptent pas au comportement adverse. La stratégie têtue peut être efficace dans certains cas, mais elle reste prévisible.  
+La stratégie aléatoire coordination est efficace lorsque le jeu favorise la présence en groupe, mais elle devient vulnérable face à des stratégies plus intelligentes.  
+Les stratégies fictitious play et regret matching utilisent l’historique des parties pour s’améliorer.  
+Parmi elles, regret matching est la plus robuste car elle apprend progressivement les meilleures décisions.  
