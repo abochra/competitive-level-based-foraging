@@ -33,6 +33,7 @@ Les règles de score dépendent du type de carte.
 Deux structures d'états sont maintenues entre les épisodes :  
  - `fp_etat[t]`: dictionnaire `{fiole : nb_visites_adversaire}` par équipe pour le *fictitious play*  
  - `rm_etat[t][p]`: dictionnaire `{fiole : regret_cumulé}` par joueur par équipe pour le *regret matching* 
+ - `ucb_etat[t][p]`: dictionnaire `{fiole : {'wins' :int, 'visits':int}}` par joueur par équipe pour le *UCB*
 
 ## Description des stratégies proposées
 
@@ -55,8 +56,8 @@ Stratégie de best response basée sur l'historique des fioles visitées par l'a
 **Stratégie_regret_matching**  
 Stratégie adaptative basée sur les regrets cumulés par un joueur de ne pas avoir joué une fiole. Plus une fiole a un regret élevé, plus elle a de chances d’être choisie par le joueur. Si tous les regrets sont nuls, le choix de la fiole sera aléatoire.
 
-**Stratégie_UCB** 
-Stratégie déterministe qui consiste à exploiter les choix de fioles qui font gagner les agents et à explorer les choix peu explorées jusqu'à présent. 
+**Stratégie_UCB**  
+Stratégie déterministe qui consiste à exploiter les choix de fioles qui font gagner les agents et à explorer les choix peu explorées jusqu'à présent. Le joueur lorsqu'il exploite, va choisir la fiole avec le meilleur score UCB : `wins/visits + √(log(t) / visits)`. Le second terme est un bonus d'exploration qui favorise les fioles peu visitées puis qui décroît naturellement au fil du temps au profit de l'exploitation.
 
 ## Description des résultats
 Comparaison entre les stratégies.  
@@ -66,37 +67,38 @@ Comparaison entre les stratégies.
 ### Carte *yellow-map*
 Nombre de joueurs = 16 (8 par équipe) 
 
-|   | Têtu | Aléatoire uniforme | Aléatoire coordination | Fictitious play | Regret matching |
-| :--- | :---: | :---: | :---: | :---: | ---: |
-| **Têtu** | — | 22/16 | 40/10 | 37/11 | 29/16 |
-| **Aléatoire uniforme** |  16/22 | — | 33/10 | 28/14 | 29/11 |
-| **Aléatoire coordination** | 10/40 | 10/33 | — | 10/26 | 10/33 |
-| **Fictitious play** | 11/37 | 14/28 | 26/10 | — | 11/35 |
-| **Regret matching** | 16/29 | 11/29 | 33/10 | 35/11 | — |
+|   | Têtu | Aléatoire uniforme | Aléatoire coordination | Fictitious play | Regret matching | UCB |
+| :--- | :---: | :---: | :---: | :---: | :---: | ---: |
+| **Têtu** | — | 22/16 | 40/10 | 37/11 | 29/16 | 25/18 |
+| **Aléatoire uniforme** |  16/22 | — | 33/10 | 28/14 | 29/11 | 21/20 |
+| **Aléatoire coordination** | 10/40 | 10/33 | — | 10/26 | 10/33 | 10/28 |
+| **Fictitious play** | 11/37 | 14/28 | 26/10 | — | 11/35 | 18/19|
+| **Regret matching** | 16/29 | 11/29 | 33/10 | 35/11 | — | 17/23 |
+| **UCB** | 18/25 | 20/21 | 28/10 | 19/18 | 23/17 | —|
 
 ### Carte *red-map*
 Nombre de joueurs = 16 (8 par équipe)
 
-|   | Têtu | Aléatoire uniforme | Aléatoire coordination | Fictitious play | Regret matching |
-| :--- | :---: | :---: | :---: | :---: | ---: |
-| **Têtu** | — | 21/14 | 15/10 | 19/24 | 19/18 |
-| **Aléatoire uniforme** | 14/21 | — | 20/10 | 17/11 | 16/13 |
-| **Aléatoire coordination** | 10/15 | 10/20 | — | 9/16 | 10/18 |
-| **Fictitious play** | 24/19 | 11/17 | 16/9 | — | 19/17 |
-| **Regret matching** | 18/19 | 13/16 | 18/10 | 17/19 | — |
-
+|   | Têtu | Aléatoire uniforme | Aléatoire coordination | Fictitious play | Regret matching | UCB |
+| :--- | :---: | :---: | :---: | :---: | :---: | ---: |
+| **Têtu** | — | 21/14 | 15/10 | 19/24 | 19/18 | 15/17 |
+| **Aléatoire uniforme** | 14/21 | — | 20/10 | 17/11 | 16/13 | 15/15 |
+| **Aléatoire coordination** | 10/15 | 10/20 | — | 9/16 | 10/18 | 10/19 |
+| **Fictitious play** | 24/19 | 11/17 | 16/9 | — | 19/17 | 11/14 |
+| **Regret matching** | 18/19 | 13/16 | 18/10 | 17/19 | — | 12/20 |
+| **UCB** | 17/15 | 15/15 | 19/10 | 14/11 | 20/12 | — |
 
 ### Carte *green-map*
 Nombre de joueurs = 34 (17 par équipe)
 
-|   | Têtu | Aléatoire uniforme | Aléatoire coordination | Fictitious play | Regret matching |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Têtu** | — | 21/37 | 41/18 | 29/22 | 30/29 |
-| **Aléatoire uniforme** | 37/21 | — | 28/23 | 26/16 | 21/19 |
-| **Aléatoire coordination** | 18/41 | 23/28 | — | 13/13 | 20/18 |
-| **Fictitious play** | 22/29 | 16/26 | 13/13 | — | 26/24 |
-| **Regret matching** | 29/30 | 19/21 | 18/20 | 24/26 | — |
-
+|   | Têtu | Aléatoire uniforme | Aléatoire coordination | Fictitious play | Regret matching | UCB |
+| :--- | :---: | :---: | :---: | :---: | :---: | ---: |
+| **Têtu** | — | 21/37 | 41/18 | 29/22 | 30/29 | 27/31 |
+| **Aléatoire uniforme** | 37/21 | — | 28/23 | 26/16 | 21/19 | 23/28 |
+| **Aléatoire coordination** | 18/41 | 23/28 | — | 13/13 | 20/18 | 15/34 |
+| **Fictitious play** | 22/29 | 16/26 | 13/13 | — | 26/24 | 19/22 |
+| **Regret matching** | 29/30 | 19/21 | 18/20 | 24/26 | — | 20/23 |
+| **UCB** | 31/27 | 28/23 | 34/15 | 22/19 | 23/20 | — |
   
 ### Carte *blue-map*
 Nombre de joueurs = 34 (17 par équipe)
