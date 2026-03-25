@@ -103,27 +103,27 @@ Nombre de joueurs = 34 (17 par équipe)
 ### Carte *blue-map*
 Nombre de joueurs = 34 (17 par équipe)
 
-|   | Têtu | Aléatoire uniforme | Aléatoire coordination | Fictitious play | Regret matching |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Têtu** | — | 28/34 | 30/25 | 77/1 | 16/34 |
-| **Aléatoire uniforme** | 34/28 | — | 20/39 | 47/8 | 27/31 |
-| **Aléatoire coordination** | 25/30 | 39/20 | — | 34/11 | 34/18 |
-| **Fictitious play** | 1/77 | 8/47 | 11/34 | — | 14/22 |
-| **Regret matching** | 34/16 | 31/27 | 18/34 | 22/14 | — |
-
+|   | Têtu | Aléatoire uniforme | Aléatoire coordination | Fictitious play | Regret matching | UCB |
+| :--- | :---: | :---: | :---: | :---: | :---: | ---: |
+| **Têtu** | — | 28/34 | 30/25 | 77/1 | 16/34 | 35/19 |
+| **Aléatoire uniforme** | 34/28 | — | 20/39 | 47/8 | 27/31 | 37/32 | 
+| **Aléatoire coordination** | 25/30 | 39/20 | — | 34/11 | 34/18 | 27/33 |
+| **Fictitious play** | 1/77 | 8/47 | 11/34 | — | 14/22 | 18/33 |
+| **Regret matching** | 34/16 | 31/27 | 18/34 | 22/14 | — | 26/34|
+| **UCB** | 19/35 | 32/37 | 33/27 | 33/18 | 34/26 | — |
 ---
 
 ### Carte *mixed-map*
 Nombre de joueurs = 34 (17 par équipe)
 
-|   | Têtu | Aléatoire uniforme | Aléatoire coordination | Fictitious play | Regret matching |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Têtu** | — | 29/37 | 39/30 | 39/11 | 40/25 |
-| **Aléatoire uniforme** | 37/29 | — | 34/31 | 52/14 | 31/34 |
-| **Aléatoire coordination** | 30/39 | 31/34 | — | 38/16 | 28/33 |
-| **Fictitious play** | 11/39 | 14/52 | 16/38 | — | 18/53 |
-| **Regret matching** | 25/40 | 34/31 | 33/28 | 53/18 | — |
-
+|   | Têtu | Aléatoire uniforme | Aléatoire coordination | Fictitious play | Regret matching | UCB |
+| :--- | :---: | :---: | :---: | :---: | :---: | ---: |
+| **Têtu** | — | 29/37 | 39/30 | 39/11 | 40/25 | 32/31 |
+| **Aléatoire uniforme** | 37/29 | — | 34/31 | 52/14 | 31/34 | 37/29 |
+| **Aléatoire coordination** | 30/39 | 31/34 | — | 38/16 | 28/33 | 25/34 |
+| **Fictitious play** | 11/39 | 14/52 | 16/38 | — | 18/53 | 19/40 |
+| **Regret matching** | 25/40 | 34/31 | 33/28 | 53/18 | — | 29/33 |
+| **UCB** | 31/32 | 29/37 | 34/25 | 40/19 | 33/29 | — |
 
 
 ## Conclusion

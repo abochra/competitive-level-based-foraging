@@ -62,7 +62,7 @@ def main():
     #print ("Iterations: ")
     #print (iterations)
 
-    init("green-map")
+    init("mixed-map")
     
 
     
