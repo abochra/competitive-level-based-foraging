@@ -55,6 +55,9 @@ Stratégie de best response basée sur l'historique des fioles visitées par l'a
 **Stratégie_regret_matching**  
 Stratégie adaptative basée sur les regrets cumulés par un joueur de ne pas avoir joué une fiole. Plus une fiole a un regret élevé, plus elle a de chances d’être choisie par le joueur. Si tous les regrets sont nuls, le choix de la fiole sera aléatoire.
 
+**Stratégie_UCB** 
+Stratégie déterministe qui consiste à exploiter les choix de fioles qui font gagner les agents et à explorer les choix peu explorées jusqu'à présent. 
+
 ## Description des résultats
 Comparaison entre les stratégies.  
 > Tous les tests expérimentaux ont été réalisés avec 10 épisodes de confrontation (en augmentant le game.fps pour plus de rapidité) et un nombre de joueurs dépendant du type de carte.  

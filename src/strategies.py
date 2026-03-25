@@ -1,4 +1,5 @@
 import random
+import math
 
 def strategie_tetu(player, items, around_pos_free_func, prev_choices=None):
     """
@@ -128,5 +129,39 @@ def strategie_regret_matching(player, items, around_pos_free_func, regrets=None)
 
 def strategie_UCB(player, items, around_pos_free_func, ucb_etat = None, t=0):
     """
+    Stratégie UCB (Upper Confidence Bound) : apprentissage par renforcement, sélection déterministe de la fiole avec le meilleur score UCB avec la formule : wins/visits + sqrt(log(t)/visits)
+    On commence d'abord par explorer les fioles puis par les exploiter (notamment aller vers la fiole avec le meilleur score UCB)
+    Prend en arguments :
+     - player -> joueur courant 
+     - items -> liste des fioles disponibles
+     - around_pos_free_func -> fonction déterminant les positions libres autour d'une fiole donnée
+     - ucb_etat -> dictionnaire {fiole: {'wins' : int, 'visits' : int}} propre à chaque joueur mis à jour par main.py
+     - t -> nombre total d'itérations (épisodes ici)
+    Retourne un tuple (f, pos) : une fiole et une position attribuées au joueur
     """
-    pass
+    if ucb_etat is None: 
+        ucb_etat = {}
+    
+    # On initialise le dictionnaire au premier appel
+    for item in items:
+        if item not in ucb_etat:
+            ucb_etat[item] = {'wins': 0, 'visits': 0}
+    
+    # On explore chaque fiole au moins une fois
+    non_visitees = [item for item in items if ucb_etat[item]['visits'] == 0]  # Liste des fioles jamais visitées
+    if non_visitees:  # S'il reste encore des fioles jamais visitées
+        f = random.choice(non_visitees)
+    else:  # Si on a exploré toutes les fioles, on va choisir la fiole avec le meilleur score UCB
+        max_score = float('-inf')
+        best_fiole = None
+        for item in items:
+            w = ucb_etat[item]['wins']   # On récupère le nombre de fois qu'on a gagné sur cette fiole
+            v = ucb_etat[item]['visits']   # On récupère le nombre de fois qu'on a visité cette fiole
+            score = w / v + math.sqrt(math.log(t + 1)/ v)  # Calcul du score UCB (log(t + 1) pour éviter d'avoir log(0))
+            if score > max_score:  # Si le score calculé est supérieur au score max, on a une nouvelle meilleure fiole
+                max_score = score
+                best_fiole = item
+        f = best_fiole
+    
+    pos = random.choice(around_pos_free_func(f.get_rowcol()))  # Choix d'une position libre autour de la fiole f
+    return (f, pos)
