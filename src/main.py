@@ -23,7 +23,7 @@ from search import probleme
 
 #-------------------------------
 # Stratégies
-from strategies import strategie_aleatoire_uniforme, strategie_tetu, strategie_aleatoire_coordination, strategie_fictitious_play, strategie_regret_matching
+from strategies import strategie_aleatoire_uniforme, strategie_tetu, strategie_aleatoire_coordination, strategie_fictitious_play, strategie_regret_matching, strategie_UCB
 
 # Choisir une stratégie pour chaque équipe
 strategie_eq = [strategie_regret_matching, strategie_regret_matching]
@@ -190,6 +190,9 @@ def main():
     # Pour la stratégie regret matching, on aura besoin d'une liste de deux listes de nb_players_team dictionnaires (un pour chaque joueur) qui contiennent le regret cumulé pour chaque fiole {fiole : regret_cumule}
     rm_etat = [[{} for _ in range(nb_players_team)] for _ in range(2)]
 
+    # Pour la stratégie UCB, on aura besoin d'une liste de deux listes de nb_players_team dictionnaire (un pour chaque joueur de chaque équipe)
+    ucb_etat = [[{} for _ in range(nb_players_team)] for _ in range(2)]    # On aura pour chaque joueur pour chaque fiole : {fiole : {'wins' :int, 'visits':int}}
+
     # Pour mettre à jour les regrets pour chaque équipe, il faut un dictionnaire (pour les scores à chaque fiole)
     # scores_etats = {}  # On aura {fiole : (pts_eq0, pts_eq1)}
 
@@ -210,7 +213,7 @@ def main():
                         fp_etat[t][fiole_advers] = fp_etat[t].get(fiole_advers, 0) + 1
 
                 # Regret matching : calculer et cumuler les regrets
-                if strategie_eq[t].__name__ == "strategie_regret_matching":
+                elif strategie_eq[t].__name__ == "strategie_regret_matching":
                     for p in range(nb_players_team):  # Pour chaque joueur de l'équipe t
                         fiole_p = choix_fiole[t][p]   # On récupère la fiole jouée par le joueur p dans l'équipe t à l'épisode précédent
                         score_obtenu = scores_etats.get(fiole_p, (0,0))[t]  # On récupère le score obtenu du joueur p dans l'équipe t à l'épisode précédent
@@ -218,6 +221,16 @@ def main():
                             score_hypothese = scores_etats.get(f, (0,0))[t]  # Calcul du score qu'on aurait pu avoir en allant sur la fiole f
                             regret = max(0.0, score_hypothese - score_obtenu)   # Calcul du regret de n'avoir pas joué la fiole f
                             rm_etat[t][p][f] = rm_etat[t][p].get(f, 0.0) + regret   # Stockage du regret cumulé du joueur p de l'équipe t de n'avoir pas joué la fiole f 
+                
+                # UCB : mettre à jour les gains et les visites pour chaque fiole visitée
+                elif strategie_eq[t].__name__ == "strategie_UCB":
+                    for p in range(nb_players_team):  # Pour chaque joueur de l'équipe t
+                        etat = ucb_etat[t][p]
+                        fiole_p = choix_fiole[t][p]   # On récupère la fiole jouée par le joueur p dans l'équipe t à l'épisode précédent
+                        gain = scores_etats.get(fiole_p, (0,0))[t]   # On récupère le point gagné ou non par l'équipe t
+                        if fiole_p in etat:
+                            etat[fiole_p]['wins'] += gain   # Si l'équipe t a gagné on va ajouter 1 (+ 1 victoire) sinon on ajoute 0
+                            etat[fiole_p]['visits'] += 1
 
         # Chaque équipe va choisir sa position et sa fiole cible simultanément
         choix_fiole = [[],[]]
@@ -255,6 +268,12 @@ def main():
             elif nom == "strategie_regret_matching":
                 for p in range(nb_players_team):
                     f, pos = strategie_eq[t](team[t][p], items, around_pos_free, regrets=rm_etat[t][p])
+                    choix_fiole[t].append(f)
+                    choix_pos[t].append(pos)
+            
+            elif nom == "strategie_UCB":
+                for p in range(nb_players_team):
+                    f, pos = strategie_eq[t](team[t][p], items, around_pos_free, ucb_etat=ucb_etat[t][p], t=e)
                     choix_fiole[t].append(f)
                     choix_pos[t].append(pos)
 
