@@ -124,3 +124,9 @@ def strategie_regret_matching(player, items, around_pos_free_func, regrets=None)
     
     pos = random.choice(around_pos_free_func(f.get_rowcol()))  # Choix d'une position libre autour de la fiole f
     return (f, pos)
+
+
+def strategie_UCB(player, items, around_pos_free_func, ucb_etat = None, t=0):
+    """
+    """
+    pass

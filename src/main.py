@@ -190,8 +190,7 @@ def main():
     # Pour la stratégie regret matching, on aura besoin d'une liste de deux listes de nb_players_team dictionnaires (un pour chaque joueur) qui contiennent le regret cumulé pour chaque fiole {fiole : regret_cumule}
     rm_etat = [[{} for _ in range(nb_players_team)] for _ in range(2)]
 
-    # Pour mettre à jour les regrets et le nombre de visites de chaque fiole par chaque équipe, il faut une liste de deux listes (choix) et un dictionnaire (pour les scores à chaque fiole)
-    # choix_etats = [[],[]]
+    # Pour mettre à jour les regrets pour chaque équipe, il faut un dictionnaire (pour les scores à chaque fiole)
     # scores_etats = {}  # On aura {fiole : (pts_eq0, pts_eq1)}
 
     # -------------------------------
@@ -427,8 +426,7 @@ def main():
         # -------------------------------
         # SAUVEGARDE DES CHOIX ET DES SCORES DE CHAQUE EQUIPE
         # -------------------------------
-        # Après chaque épisode, il faut sauvegarder les choix et les scores pour les utiliser dans les stratégies de regret_matching et fictitious play au prochain épisode
-        choix_etats = [list(choix_fiole[0]), list(choix_fiole[1])]
+        # Après chaque épisode, il faut sauvegarder les scores pour les utiliser dans la stratégie de regret_matching au prochain épisode
         scores_etats = {}
 
         for i, o in enumerate(items):
