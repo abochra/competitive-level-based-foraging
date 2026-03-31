@@ -1,9 +1,5 @@
 # Rapport de projet
 
-## Groupe
-* HADDOUCHI CELINE 
-* ALIAOUI BOCHRA 
-
 ## Description des choix importants d'implémentation
 
 La carte est chargée à partir de fichiers JSON représentant différentes configurations : yellow-map, red-map, green-map, blue-map, mixed-map.
